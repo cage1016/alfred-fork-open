@@ -1,5 +1,9 @@
 # alfred-fork-open
 
+[![Release](https://github.com/cage1016/alfred-fork-open/actions/workflows/release.yml/badge.svg)](https://github.com/cage1016/alfred-fork-open/actions/workflows/release.yml)
+![GitHub all releases](https://img.shields.io/github/downloads/cage1016/alfred-fork-open/total)
+![](https://img.shields.io/badge/Alfred-5-blueviolet)
+
 ![](screenshots/demo.jpg)
 
 ## Features
