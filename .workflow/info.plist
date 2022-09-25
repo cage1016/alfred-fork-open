@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.kaichu.forkopen</string>
+	<key>category</key>
+	<string>Tools</string>
+	<key>connections</key>
+	<dict>
+		<key>3BA234E3-3BBA-4A01-9CA3-1D4AE0DEF504</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>617595C7-1021-4F35-9658-0E38BF8CC270</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>880129EC-34BC-4C22-87AB-8812FB25949A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>A5610B59-ACBE-4156-9A48-2839042DD8B8</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>KAI CHU CHUNG</string>
+	<key>description</key>
+	<string>Quick open folder with Fork</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Fork Open</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>keyword</key>
+				<string>fork</string>
+				<key>subtext</key>
+				<string>Open Finder folder in Fork or optionally enter a path to open</string>
+				<key>text</key>
+				<string>Open with Fork</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>617595C7-1021-4F35-9658-0E38BF8CC270</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>applescript</key>
+				<string>on alfred_script(q)
+
+set finderSelection to ""
+set theTarget to ""
+set appPath to path to application "Fork"
+set defaultTarget to (path to home folder as alias)
+-- comment line above and uncomment line below to open desktop instead of user home when there's no selection or open folder in the Finder:
+-- set defaultTarget to (path to desktop folder as alias)
+
+if (q as string) is "" then
+    tell application "Finder"
+        set finderSelection to (get selection)
+        if length of finderSelection is greater than 0 then
+            set theTarget to finderSelection
+        else
+            try
+                set theTarget to (folder of the front window as alias)
+            on error
+                set theTarget to defaultTarget
+            end try
+        end if
+
+        tell application "Finder"
+            open theTarget using appPath
+        end tell
+
+    end tell
+else
+    try
+        set targets to {}
+        set oldDelimiters to text item delimiters
+        set text item delimiters to tab
+        set qArray to every text item of q
+        set text item delimiters to oldDelimiters
+        repeat with atarget in qArray
+
+            if atarget starts with "~" then
+                set userHome to POSIX path of (path to home folder)
+                if userHome ends with "/" then
+                    set userHome to characters 1 thru -2 of userHome as string
+                end if
+
+                try
+                    set atarget to userHome &amp; characters 2 thru -1 of atarget as string
+                on error
+                    set atarget to userHome
+                end try
+
+            end if
+
+            set targetAlias to ((POSIX file atarget) as alias)
+            set targets to targets &amp; targetAlias
+        end repeat
+
+        set theTarget to targets
+
+        tell application "Finder"
+            open theTarget using appPath
+        end tell
+
+    on error
+        return (atarget as string) &amp; " is not a valid file or folder path."
+    end try
+end if
+
+
+end alfred_script</string>
+				<key>cachescript</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.applescript</string>
+			<key>uid</key>
+			<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Open with Fork</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>anchorfields</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>daterange</key>
+				<integer>0</integer>
+				<key>fields</key>
+				<array>
+					<dict>
+						<key>field</key>
+						<string>kMDItemDisplayName</string>
+						<key>not</key>
+						<false/>
+						<key>split</key>
+						<true/>
+						<key>value</key>
+						<string>{query}</string>
+						<key>words</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>field</key>
+						<string>kMDItemAlternateNames</string>
+						<key>not</key>
+						<false/>
+						<key>split</key>
+						<true/>
+						<key>value</key>
+						<string>{query}</string>
+						<key>words</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>field</key>
+						<string>kMDItemFinderComment</string>
+						<key>not</key>
+						<false/>
+						<key>split</key>
+						<true/>
+						<key>value</key>
+						<string>{query}</string>
+						<key>words</key>
+						<true/>
+					</dict>
+				</array>
+				<key>includesystem</key>
+				<false/>
+				<key>keyword</key>
+				<string>forkf</string>
+				<key>limit</key>
+				<integer>0</integer>
+				<key>runningsubtext</key>
+				<string></string>
+				<key>scopes</key>
+				<array/>
+				<key>sortmode</key>
+				<integer>0</integer>
+				<key>subtext</key>
+				<string>Find files and folders and open in Fork</string>
+				<key>title</key>
+				<string>Find and open with Fork</string>
+				<key>types</key>
+				<array/>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.filefilter</string>
+			<key>uid</key>
+			<string>A5610B59-ACBE-4156-9A48-2839042DD8B8</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>acceptsmulti</key>
+				<integer>0</integer>
+				<key>filetypes</key>
+				<array/>
+				<key>name</key>
+				<string>Open with Fork</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.action</string>
+			<key>uid</key>
+			<string>3BA234E3-3BBA-4A01-9CA3-1D4AE0DEF504</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string># alfred-fork-open
+
+![](./demo.jpg)
+
+## Features
+
+- Alfred 5 workflow for opening folders in Fork.
+
+## Requires
+
+- Preferably Alfred 5
+
+## Usage
+
+![](./usage.jpg)
+
+### Open
+
+1. Use the keyword `fork` to trigger the workflow
+2. Press `enter` to open the current folder or the selected file
+3. Alternatively, type a path to open (e.g., `~/Desktop`)
+
+### Search &amp; Open
+
+1. Use the keyword `forkf` to trigger the workflow
+2. Press `enter` or begin to type your folder search term
+3. Select the folder you want to open and press `enter`
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.</string>
+	<key>uidata</key>
+	<dict>
+		<key>3BA234E3-3BBA-4A01-9CA3-1D4AE0DEF504</key>
+		<dict>
+			<key>xpos</key>
+			<real>190</real>
+			<key>ypos</key>
+			<real>395</real>
+		</dict>
+		<key>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</key>
+		<dict>
+			<key>xpos</key>
+			<real>595</real>
+			<key>ypos</key>
+			<real>285</real>
+		</dict>
+		<key>617595C7-1021-4F35-9658-0E38BF8CC270</key>
+		<dict>
+			<key>xpos</key>
+			<real>190</real>
+			<key>ypos</key>
+			<real>175</real>
+		</dict>
+		<key>880129EC-34BC-4C22-87AB-8812FB25949A</key>
+		<dict>
+			<key>xpos</key>
+			<real>410</real>
+			<key>ypos</key>
+			<real>285</real>
+		</dict>
+		<key>A5610B59-ACBE-4156-9A48-2839042DD8B8</key>
+		<dict>
+			<key>xpos</key>
+			<real>190</real>
+			<key>ypos</key>
+			<real>285</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array/>
+	<key>version</key>
+	<string>0.1.0</string>
+	<key>webaddress</key>
+	<string>https://github.com/cage1016/alfred-fork-open</string>
+</dict>
+</plist>

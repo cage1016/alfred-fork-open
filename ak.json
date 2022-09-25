@@ -1,0 +1,23 @@
+{
+    "go_mod_package": "github.com/cage1016/alfred-fork-open",
+    "workflow": {
+        "folder": ".workflow",
+        "name": "Fork Open",
+        "description": "Quick open folder with Fork",
+        "category_comment": "category: Tools, Internet, Productivity, Uncategorised",
+        "category": "Tools",
+        "bundle_id": "com.kaichu.forkopen",
+        "created_by": "",
+        "web_address": "https://github.com/cage1016/alfred-fork-open",
+        "version": "0.1.0"
+    },
+    "update": {
+        "github_repo": "https://github.com/cage1016/alfred-fork-open"
+    },
+    "license": {
+        "type_comment": "support license https://github.com/nishanths/license",
+        "type": "mit",
+        "year": "2022",
+        "name": "KAI CHU CHUNG"
+    }
+}
