@@ -21,6 +21,31 @@
 				<false/>
 			</dict>
 		</array>
+		<key>5A3CC887-6C41-4544-826E-3284E6D13C7C</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>2CE65016-011C-4B73-A70E-2F8A27F94073</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>sourceoutputuid</key>
+				<string>6D8D656A-0353-4503-B4C8-D2466DA6113E</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>7ECD11FC-5018-4413-9711-F6EE612DC872</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>617595C7-1021-4F35-9658-0E38BF8CC270</key>
 		<array>
 			<dict>
@@ -38,7 +63,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</string>
+				<string>5A3CC887-6C41-4544-826E-3284E6D13C7C</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -75,7 +100,7 @@
 			<key>config</key>
 			<dict>
 				<key>argumenttype</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>keyword</key>
 				<string>fork</string>
 				<key>subtext</key>
@@ -95,102 +120,21 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>applescript</key>
-				<string>on alfred_script(q)
-
-set finderSelection to ""
-set theTarget to ""
-set appPath to path to application "Fork"
-set defaultTarget to (path to home folder as alias)
--- comment line above and uncomment line below to open desktop instead of user home when there's no selection or open folder in the Finder:
--- set defaultTarget to (path to desktop folder as alias)
-
-if (q as string) is "" then
-    tell application "Finder"
-        set finderSelection to (get selection)
-        if length of finderSelection is greater than 0 then
-            set theTarget to finderSelection
-        else
-            try
-                set theTarget to (folder of the front window as alias)
-            on error
-                set theTarget to defaultTarget
-            end try
-        end if
-
-        tell application "Finder"
-            open theTarget using appPath
-        end tell
-
-    end tell
-else
-    try
-        set targets to {}
-        set oldDelimiters to text item delimiters
-        set text item delimiters to tab
-        set qArray to every text item of q
-        set text item delimiters to oldDelimiters
-        repeat with atarget in qArray
-
-            if atarget starts with "~" then
-                set userHome to POSIX path of (path to home folder)
-                if userHome ends with "/" then
-                    set userHome to characters 1 thru -2 of userHome as string
-                end if
-
-                try
-                    set atarget to userHome &amp; characters 2 thru -1 of atarget as string
-                on error
-                    set atarget to userHome
-                end try
-
-            end if
-
-            set targetAlias to ((POSIX file atarget) as alias)
-            set targets to targets &amp; targetAlias
-        end repeat
-
-        set theTarget to targets
-
-        tell application "Finder"
-            open theTarget using appPath
-        end tell
-
-    on error
-        return (atarget as string) &amp; " is not a valid file or folder path."
-    end try
-end if
-
-
-end alfred_script</string>
-				<key>cachescript</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.applescript</string>
-			<key>uid</key>
-			<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
-				<true/>
+				<false/>
 				<key>removeextension</key>
 				<false/>
 				<key>text</key>
-				<string>{query}</string>
+				<string>{var:error}</string>
 				<key>title</key>
 				<string>Open with Fork</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
-			<string>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</string>
+			<string>2CE65016-011C-4B73-A70E-2F8A27F94073</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -275,6 +219,82 @@ end alfred_script</string>
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./exe open "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>880129EC-34BC-4C22-87AB-8812FB25949A</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>conditions</key>
+				<array>
+					<dict>
+						<key>inputstring</key>
+						<string>{var:error}</string>
+						<key>matchcasesensitive</key>
+						<true/>
+						<key>matchmode</key>
+						<integer>1</integer>
+						<key>matchstring</key>
+						<string></string>
+						<key>outputlabel</key>
+						<string>Error</string>
+						<key>uid</key>
+						<string>6D8D656A-0353-4503-B4C8-D2466DA6113E</string>
+					</dict>
+				</array>
+				<key>elselabel</key>
+				<string>success</string>
+				<key>hideelse</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.conditional</string>
+			<key>uid</key>
+			<string>5A3CC887-6C41-4544-826E-3284E6D13C7C</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>open {var:path} with Fork</string>
+				<key>title</key>
+				<string>Open with Fork</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>7ECD11FC-5018-4413-9711-F6EE612DC872</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>acceptsmulti</key>
 				<integer>0</integer>
 				<key>filetypes</key>
@@ -324,40 +344,56 @@ end alfred_script</string>
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.</string>
 	<key>uidata</key>
 	<dict>
+		<key>2CE65016-011C-4B73-A70E-2F8A27F94073</key>
+		<dict>
+			<key>colorindex</key>
+			<integer>1</integer>
+			<key>xpos</key>
+			<real>665</real>
+			<key>ypos</key>
+			<real>210</real>
+		</dict>
 		<key>3BA234E3-3BBA-4A01-9CA3-1D4AE0DEF504</key>
 		<dict>
 			<key>xpos</key>
-			<real>190</real>
+			<real>105</real>
 			<key>ypos</key>
-			<real>395</real>
+			<real>370</real>
 		</dict>
-		<key>475F7BA1-0B8B-4BAC-978E-1C692B523A8C</key>
+		<key>5A3CC887-6C41-4544-826E-3284E6D13C7C</key>
 		<dict>
 			<key>xpos</key>
-			<real>595</real>
+			<real>530</real>
 			<key>ypos</key>
-			<real>285</real>
+			<real>280</real>
 		</dict>
 		<key>617595C7-1021-4F35-9658-0E38BF8CC270</key>
 		<dict>
 			<key>xpos</key>
-			<real>190</real>
+			<real>105</real>
 			<key>ypos</key>
-			<real>175</real>
+			<real>150</real>
+		</dict>
+		<key>7ECD11FC-5018-4413-9711-F6EE612DC872</key>
+		<dict>
+			<key>xpos</key>
+			<real>665</real>
+			<key>ypos</key>
+			<real>345</real>
 		</dict>
 		<key>880129EC-34BC-4C22-87AB-8812FB25949A</key>
 		<dict>
 			<key>xpos</key>
-			<real>410</real>
+			<real>355</real>
 			<key>ypos</key>
-			<real>285</real>
+			<real>260</real>
 		</dict>
 		<key>A5610B59-ACBE-4156-9A48-2839042DD8B8</key>
 		<dict>
 			<key>xpos</key>
-			<real>190</real>
+			<real>105</real>
 			<key>ypos</key>
-			<real>285</real>
+			<real>260</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
